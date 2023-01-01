@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Edge {
-    private Vertex vertex;//second vertex of edge
+    private Vertex vertex;//second vertex(o2) of edge(->): o1 -> o2
     private String label;
 
     @Override
