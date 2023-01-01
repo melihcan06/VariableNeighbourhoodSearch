@@ -69,7 +69,7 @@ public class Graph {
             HashMap<String, String> mapGraphCheckResult = dfs(mapGraphCheck, stack);
             return mapGraphCheckResult.values().stream()
                     .filter(Constants.DFSCheck.checked::equals)
-                    .toList().size() == mapGraphCheckResult.size();
+                    .toList().size() == mapGraphCheck.size();
         }
         return false;
     }
