@@ -48,6 +48,7 @@ public class Graph {
         printGraph(false);
     }
 
+    // TODO -> dfs spannig tree yi connected olarak goremiyor!! duzelt!
     private HashMap<String, String> dfs(HashMap<String, String> mapGraphCheck, Stack<Vertex> stack) {
         while (stack != null && !stack.isEmpty()) {
             Vertex vertex = stack.pop();
@@ -77,14 +78,6 @@ public class Graph {
             return mapGraphCheckResult.values().stream()
                     .filter(Constants.DFSCheck.checked::equals)
                     .toList().size() == mapGraphCheck.size();
-        }
-        return false;
-    }
-
-    // TODO -> yazilacak!
-    public boolean isGraphValid() {
-        if (isGraphConnected()) {
-            return true;
         }
         return false;
     }
