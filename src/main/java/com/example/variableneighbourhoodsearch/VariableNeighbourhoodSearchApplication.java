@@ -31,5 +31,11 @@ public class VariableNeighbourhoodSearchApplication {
         graph.readGraphFromText("C:\\Users\\melih\\Downloads\\VariableNeighbourhoodSearch\\src\\main\\graph.txt");
         graph.printGraph();
         System.out.println(graph.isGraphConnected());
+        graph.printLabels();
+        System.out.println("---------------");
+        Graph subGraph = graph.generateInitialSolution();
+        subGraph.printGraph();
+        System.out.println(subGraph.isGraphConnected());
+        subGraph.printLabels();
     }
 }
