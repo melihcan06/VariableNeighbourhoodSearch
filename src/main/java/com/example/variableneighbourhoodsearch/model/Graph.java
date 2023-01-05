@@ -15,7 +15,7 @@ import java.util.stream.*;
 public class Graph {
 
     private HashMap<Vertex, LinkedList<Edge>> graph = new HashMap<>();
-    private Set<String> setLabels = new HashSet<>();
+    private HashSet<String> setLabels = new HashSet<>();
 
     public boolean isGraphNotEmpty() {
         if (graph != null && !graph.keySet().isEmpty()) {
@@ -70,10 +70,10 @@ public class Graph {
     public boolean isGraphConnected() {
         if (isGraphNotEmpty()) {
             HashMap<String, String> mapGraphCheck = new HashMap<>(); // vertex.name, Constants.DFSCheck
-            graph.forEach((key, value) -> mapGraphCheck.put(key.getName(), Constants.DFSCheck.notChecked));
-            Vertex firstVertex = graph.keySet().stream().findFirst().orElse(new Vertex());
             Stack<Vertex> stack = new Stack<>();
+            Vertex firstVertex = graph.keySet().stream().findFirst().orElse(new Vertex());
             stack.push(firstVertex);
+            graph.forEach((key, value) -> mapGraphCheck.put(key.getName(), Constants.DFSCheck.notChecked));
             HashMap<String, String> mapGraphCheckResult = dfs(mapGraphCheck, stack);
             return mapGraphCheckResult.values().stream()
                     .filter(Constants.DFSCheck.checked::equals)

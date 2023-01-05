@@ -28,17 +28,17 @@ public class VariableNeighbourhoodSearchApplication {
 
     public static void main(String[] args) {
         //SpringApplication.run(VariableNeighbourhoodSearchApplication.class, args);
-        // TODO -> dfs spannig tree yi connected olarak goremiyor!! duzelt!
+        // TODO -> dfs spannig tree yi connected olarak gormek icin tum baglari yazmaliyiz
         Graph graph = new Graph();
         graph.readGraphFromText("C:\\Users\\melih\\Downloads\\VariableNeighbourhoodSearch\\src\\main\\graph.txt");
         graph.printGraph();
         System.out.println(graph.isGraphConnected());
         graph.printLabels();
         System.out.println("---------------");
-        /*Graph subGraph = graph.generateInitialSolution();
+        Graph subGraph = graph.generateInitialSolution();
         subGraph.printGraph();
         System.out.println(subGraph.isGraphConnected());
-        subGraph.printLabels();*/
+        subGraph.printLabels();
         VNSAlgorithm vns = new VNSAlgorithm();
         vns.run(graph);
 
