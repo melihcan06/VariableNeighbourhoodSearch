@@ -35,10 +35,11 @@ public class VariableNeighbourhoodSearchApplication {
         System.out.println(graph.isGraphConnected());
         graph.printLabels();
         System.out.println("---------------");
-        Graph subGraph = graph.generateInitialSolution();
-        subGraph.printGraph();
-        System.out.println(subGraph.isGraphConnected());
-        subGraph.printLabels();
+//        Graph subGraph = graph.generateInitialSolution();
+//        subGraph.printGraph();
+//        System.out.println(subGraph.isGraphConnected());
+//        subGraph.printLabels();
+
         VNSAlgorithm vns = new VNSAlgorithm();
         vns.run(graph);
 
