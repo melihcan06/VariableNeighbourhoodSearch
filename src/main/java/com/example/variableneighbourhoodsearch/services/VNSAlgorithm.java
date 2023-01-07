@@ -92,8 +92,8 @@ public class VNSAlgorithm {
         System.out.println("Feasible Solution");
         subGraph.printGraphAll(graph);
 
-        //boolean isFinished = false;
-        //while(!isFinished){//durma kosulu ne olmali?
+        //for (int i = 0; i < 3; i++) {//durma kosulu ne olmali?
+        do{
             int k = 1;
             int kMax = subGraph.getLabels().size() + subGraph.getLabels().size() / 3;
             while (k < kMax) {
@@ -107,8 +107,13 @@ public class VNSAlgorithm {
                     k++;
                 }
             }
-        // isFinished = subGraph.isGraphConnected() && subGraph.isAllNodesUsing(graph, subGraph);
-        //}
+        if(subGraph.getLabels().size()>2){
+                //int breakp=0;
+                //System.out.println("subGraph.getLabels().size()>2, i: "+i);
+            System.out.println("subGraph.getLabels().size(): "+subGraph.getLabels().size());
+                subGraph.printLabels();
+            }
+        } while(subGraph.getLabels().size()>2);
         System.out.println("Last Graph");
         subGraph.printGraphAll(graph);
         return subGraph;
