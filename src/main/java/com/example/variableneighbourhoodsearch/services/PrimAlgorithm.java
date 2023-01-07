@@ -54,7 +54,7 @@ public class PrimAlgorithm {
     // create showMinimumSpanningTree for printing the constructed MST stored in mstArray[]
     void showMinimumSpanningTree(int mstArray[], int graphArray[][]) {
         if (mapVertexNameAndId.size() > 0) {
-            System.out.println("Edges");
+            System.out.println("Minimum Labeling Spanning Tree Edges:");
             for (int j = 1; j < countOfVertices; j++) {
                 System.out.println(getKeyByValue(mstArray[j]) + " <-> " + getKeyByValue(j) + "\t \t");
             }
