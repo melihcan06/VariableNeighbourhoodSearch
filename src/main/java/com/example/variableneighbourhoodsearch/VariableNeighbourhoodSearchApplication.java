@@ -36,39 +36,13 @@ public class VariableNeighbourhoodSearchApplication {
         System.out.println("All Graph");
         graph.printGraphAll(graph);
         System.out.println("---------------");
-//        Graph subGraph = graph.generateInitialSolution();
-//        subGraph.printGraph();
-//        System.out.println(subGraph.isGraphConnected());
-//        subGraph.printLabels();
 
         VNSAlgorithm vns = new VNSAlgorithm();
         Graph subGraph = vns.run(graph);
         PrimAlgorithm mst = new PrimAlgorithm();
-        int[][] matAdj = mst.convertGraphToAdjMatrix(subGraph);
-        mst.designMST(matAdj);
+        mst.designMST(mst.convertGraphToAdjMatrix(subGraph));
+        /*int[][] matAdj = mst.convertGraphToAdjMatrix(subGraph);
+        mst.designMST(matAdj);*/
 
-        /*HashSet<String> sett = new HashSet<>(); sett.add("1"); sett.add("3");
-        Graph graph1 = graph.createSubGraph(sett, false);
-        graph1.printGraphAll(graph);*/
-
-        /*Graph graph1 = graph.cloneGraph();
-        graph.getGraph().get(new Vertex("2")).add(new Edge(new Vertex("12"), "12"));
-        graph1.getGraph().remove(new Vertex("1"));
-        graph.printGraph();
-        graph1.printGraph();*/
-        /*HashSet<String> s = new HashSet<>(); s.add("a");
-        HashSet<String> s2 = (HashSet<String>) s.clone();
-        s2.remove("a");
-        s2.add("b");
-        s.add("c");
-        VNSAlgorithm vns = new VNSAlgorithm();
-        s.forEach(s1 -> System.out.println(s1));
-        System.out.println("--");
-        s2.forEach(s1 -> System.out.println(s1));
-        String ss=vns.addUnusedLabelToGraph(s,s2);
-        System.out.println("--");
-        s2.forEach(s1 -> System.out.println(s1));
-        System.out.println("--");
-        System.out.println(ss);*/
     }
 }

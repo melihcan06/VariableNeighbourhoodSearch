@@ -8,6 +8,7 @@ import java.util.stream.*;
 public class PrimAlgorithm {
     // Define the count of vertices available in the graph
     private int countOfVertices = 9;
+    private HashMap<String, Integer> mapVertexNameAndId = new HashMap<String, Integer>();
 
     public int getCountOfVertices() {
         return countOfVertices;
@@ -15,6 +16,14 @@ public class PrimAlgorithm {
 
     public void setCountOfVertices(int countOfVertices) {
         this.countOfVertices = countOfVertices;
+    }
+
+    public HashMap<String, Integer> getMapVertexNameAndId() {
+        return mapVertexNameAndId;
+    }
+
+    public void setMapVertexNameAndId(HashMap<String, Integer> mapVertexNameAndId) {
+        this.mapVertexNameAndId = mapVertexNameAndId;
     }
 
     // create findMinKeyVertex() method for finding the vertex v that has minimum key-value and that is not added MST yet
@@ -33,11 +42,28 @@ public class PrimAlgorithm {
         return minimum_index;
     }
 
+    private String getKeyByValue(Integer integer) {
+        for (Map.Entry<String, Integer> map : mapVertexNameAndId.entrySet()) {
+            if (Objects.equals(map.getValue(), integer)) {
+                return map.getKey();
+            }
+        }
+        return "";
+    }
+
     // create showMinimumSpanningTree for printing the constructed MST stored in mstArray[]
     void showMinimumSpanningTree(int mstArray[], int graphArray[][]) {
-        System.out.println("Edge \t\t Weight");
-        for (int j = 1; j < countOfVertices; j++)
-            System.out.println(mstArray[j] + " <-> " + j + "\t \t" + graphArray[j][mstArray[j]]);
+        if (mapVertexNameAndId.size() > 0) {
+            System.out.println("Edges");
+            for (int j = 1; j < countOfVertices; j++) {
+                System.out.println(getKeyByValue(mstArray[j]) + " <-> " + getKeyByValue(j) + "\t \t");
+            }
+        } else {
+            System.out.println("Edge \t\t Weight");
+            for (int j = 1; j < countOfVertices; j++) {
+                System.out.println(mstArray[j] + " <-> " + j + "\t \t" + graphArray[j][mstArray[j]]);
+            }
+        }
     }
 
     // create designMST() method for constructing and printing the MST. The graphArray[][] is an adjacency matrix that defines the graph for MST.
@@ -84,20 +110,19 @@ public class PrimAlgorithm {
         showMinimumSpanningTree(mstArray, graphArray);
     }
 
-    //TODO
     public int[][] convertGraphToAdjMatrix(Graph graph) {
         setCountOfVertices(graph.getGraph().size());
         int graphArray[][] = new int[getCountOfVertices()][getCountOfVertices()];
-        HashMap<String, Integer> mapVertexNameAndId = new HashMap<String, Integer>();
+        mapVertexNameAndId = new HashMap<String, Integer>();
 
         //her bir vertex in name ine karsilik bir indis atandi
-        int i=0;
-        for(Vertex vertex:graph.getGraph().keySet()){
+        int i = 0;
+        for (Vertex vertex : graph.getGraph().keySet()) {
             mapVertexNameAndId.put(vertex.getName(), i);
             ++i;
         }
-        System.out.println("Vertex Name: Edge id");
-        mapVertexNameAndId.forEach((s, integer) -> System.out.println(s +": "+integer));
+        /*System.out.println("Vertex Name: Edge id");
+        mapVertexNameAndId.forEach((s, integer) -> System.out.println(s +": "+integer));*/
 
         //bag olanlar 1 digerleri 0 atandi
         graph.getGraph().forEach((vertex, edges) -> {
@@ -110,6 +135,10 @@ public class PrimAlgorithm {
         });
 
         return graphArray;
+    }
+
+    public void designMST(Graph graph) {
+        designMST(convertGraphToAdjMatrix(graph));
     }
 
     //main() method start

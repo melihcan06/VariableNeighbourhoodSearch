@@ -82,6 +82,7 @@ public class Graph {
     public void printGraphAll(){
         printGraph(true);
         System.out.println("Connected: " + isGraphConnected());
+        System.out.println("Labels:");
         printLabels();
     }
 
@@ -89,6 +90,7 @@ public class Graph {
         printGraph(true);
         System.out.println("Connected: " + isGraphConnected());
         System.out.println("All Nodes: " + isAllNodesUsing(allGraph, this));
+        System.out.println("Labels:");
         printLabels();
     }
 
