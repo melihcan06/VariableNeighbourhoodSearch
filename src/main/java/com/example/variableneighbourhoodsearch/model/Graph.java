@@ -92,7 +92,6 @@ public class Graph {
         printLabels();
     }
 
-    // TODO -> dfs spannig tree yi connected olarak goremiyor!! duzelt!
     private HashMap<String, String> dfs(HashMap<String, String> mapGraphCheck, Stack<Vertex> stack) {
         while (stack != null && !stack.isEmpty()) {
             Vertex vertex = stack.pop();

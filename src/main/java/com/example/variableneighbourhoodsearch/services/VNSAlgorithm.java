@@ -87,18 +87,13 @@ public class VNSAlgorithm {
         return subGraph2;
     }
 
-    public void run(Graph graph) {
+    public Graph run(Graph graph) {
         Graph subGraph = graph.generateInitialSolution();
         System.out.println("Feasible Solution");
         subGraph.printGraphAll(graph);
 
-        boolean isFinished = false;
-        //for (int i = 0; i < 1; i++) {//TODO gecici olarak durma kosulu, degistir!
-        while(!isFinished){
-            /*Graph subGraph = graph.generateInitialSolution();
-            System.out.println("Feasible Solution");
-            subGraph.printGraphAll(graph);*/
-
+        //boolean isFinished = false;
+        //while(!isFinished){//durma kosulu ne olmali?
             int k = 1;
             int kMax = subGraph.getLabels().size() + subGraph.getLabels().size() / 3;
             while (k < kMax) {
@@ -112,9 +107,10 @@ public class VNSAlgorithm {
                     k++;
                 }
             }
-            isFinished = subGraph.isGraphConnected() && subGraph.isAllNodesUsing(graph, subGraph);
-            /*System.out.println("Last Graph");
-            subGraph.printGraphAll(graph);*/
-        }
+        // isFinished = subGraph.isGraphConnected() && subGraph.isAllNodesUsing(graph, subGraph);
+        //}
+        System.out.println("Last Graph");
+        subGraph.printGraphAll(graph);
+        return subGraph;
     }
 }

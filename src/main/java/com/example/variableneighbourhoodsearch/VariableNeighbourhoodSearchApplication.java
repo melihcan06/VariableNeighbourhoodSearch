@@ -28,6 +28,8 @@ public class VariableNeighbourhoodSearchApplication {
 
     public static void main(String[] args) {
         //SpringApplication.run(VariableNeighbourhoodSearchApplication.class, args);
+        //2 nesneli bir eleman icin equals and hashcode dene!
+
         // TODO -> dfs spannig tree yi connected olarak gormek icin tum baglari yazmaliyiz
         Graph graph = new Graph();
         graph.readGraphFromText("C:\\Users\\melih\\Downloads\\VariableNeighbourhoodSearch\\src\\main\\graph.txt");
@@ -40,7 +42,10 @@ public class VariableNeighbourhoodSearchApplication {
 //        subGraph.printLabels();
 
         VNSAlgorithm vns = new VNSAlgorithm();
-        vns.run(graph);
+        Graph subGraph = vns.run(graph);
+        PrimAlgorithm mst = new PrimAlgorithm();
+        int[][] matAdj = mst.convertGraphToAdjMatrix(subGraph);
+        mst.designMST(matAdj);
 
         /*HashSet<String> sett = new HashSet<>(); sett.add("1"); sett.add("3");
         Graph graph1 = graph.createSubGraph(sett, false);
