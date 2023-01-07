@@ -1,7 +1,6 @@
 package com.example.variableneighbourhoodsearch.model;
 
 import lombok.*;
-import org.springframework.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -15,7 +14,6 @@ import java.util.stream.*;
 public class Graph {
 
     private HashMap<Vertex, LinkedList<Edge>> graph = new HashMap<>();
-    private HashSet<String> setLabels = new HashSet<>();
 
     public boolean isGraphNotEmpty() {
         if (graph != null && !graph.keySet().isEmpty()) {
@@ -24,9 +22,38 @@ public class Graph {
         return false;
     }
 
+    public HashSet<String> getLabels() {
+        HashSet<String> labels = new HashSet<>();
+        if (isGraphNotEmpty()) {
+            graph.forEach((vertex, edges) -> {
+                edges.forEach(edge -> {
+                    labels.add(edge.getLabel());
+                });
+            });
+        }
+        return labels;
+    }
+
+    public Graph cloneGraph() {
+        Graph newGraph = new Graph();
+        if (isGraphNotEmpty()) {
+            graph.forEach((vertex, edges) -> {
+                Vertex vertex1 = new Vertex(vertex.getName());
+                LinkedList<Edge> edges1 = new LinkedList<>();
+                edges.forEach(edge -> {
+                    Vertex vertex2 = new Vertex(edge.getVertex().getName());
+                    Edge edge1 = new Edge(vertex2, edge.getLabel());
+                    edges1.add(edge1);
+                });
+                newGraph.graph.put(vertex1, edges1);
+            });
+        }
+        return newGraph;
+    }
+
     public void printLabels() {
-        if (setLabels != null) {
-            setLabels.stream().forEach(x -> System.out.println(x));
+        if (getLabels() != null) {
+            getLabels().forEach(System.out::println);
         }
     }
 
@@ -46,6 +73,23 @@ public class Graph {
 
     public void printGraph() {
         printGraph(false);
+    }
+
+    public boolean isAllNodesUsing(Graph graphALl, Graph subGraph){
+        return subGraph.graph.keySet().size() == graphALl.graph.keySet().size();
+    }
+
+    public void printGraphAll(){
+        printGraph(true);
+        System.out.println("Connected: " + isGraphConnected());
+        printLabels();
+    }
+
+    public void printGraphAll(Graph allGraph){
+        printGraph(true);
+        System.out.println("Connected: " + isGraphConnected());
+        System.out.println("All Nodes: " + isAllNodesUsing(allGraph, this));
+        printLabels();
     }
 
     // TODO -> dfs spannig tree yi connected olarak goremiyor!! duzelt!
@@ -84,7 +128,7 @@ public class Graph {
 
     public Graph createSubGraph(HashSet<String> setSubLabels, boolean isConnectedControl) {
         Graph subGraph = new Graph();
-        if (setSubLabels != null && setSubLabels.size() > 1) {
+        if (setSubLabels != null && setSubLabels.size() > 0) {
             graph.forEach((vertex, edges) -> {
                 edges.forEach(edge -> {
                     if (setSubLabels.contains(edge.getLabel())) {
@@ -104,26 +148,22 @@ public class Graph {
         return subGraph;
     }
 
-    public Graph createSubGraph(HashSet<String> setSubLabels) {
-        return createSubGraph(setSubLabels, true);
-    }
-
     public Graph generateInitialSolution() {
         Graph subGraph = new Graph();//feasible solution?
-        Random rand = new Random();
+        //Random rand = new Random();
         HashSet<String> setSubLabels = new HashSet<>();
 
         int sizeLabels;
         do {
-            sizeLabels = rand.nextInt(setLabels.size()) + 1;
-            if (sizeLabels < setLabels.size()) {
-                List<String> listSubLabels = new ArrayList<>(setLabels);
+            //sizeLabels = rand.nextInt(getLabels().size()) + 1;
+            sizeLabels = getLabels().size() - 1;
+            if (sizeLabels < getLabels().size()) {
+                List<String> listSubLabels = new ArrayList<>(getLabels());
                 Collections.shuffle(listSubLabels);
                 setSubLabels = (HashSet<String>) listSubLabels.stream().limit(sizeLabels).collect(Collectors.toSet());
                 subGraph = createSubGraph(setSubLabels, false);
             }
-        } while (!(sizeLabels < setLabels.size() && subGraph.isGraphConnected() && subGraph.graph.keySet().size() == graph.keySet().size()));
-        subGraph.setSetLabels(setSubLabels);
+        } while (!(sizeLabels < getLabels().size() && subGraph.isGraphConnected() && isAllNodesUsing(this, subGraph)));//subGraph.graph.keySet().size() == graph.keySet().size()
         return subGraph;
     }
 
@@ -146,7 +186,7 @@ public class Graph {
                     LinkedList<Edge> listEdgesOfVertexSecond = Optional.ofNullable(graph.get(vertexSecond)).orElse(new LinkedList<>());
                     graph.putIfAbsent(vertexSecond, listEdgesOfVertexSecond);
                     listEdgesOfVertex.add(new Edge(vertexSecond, vertexAndLabel[1]));
-                    setLabels.add(vertexAndLabel[1]);
+                    getLabels().add(vertexAndLabel[1]);
                 });
                 graph.put(vertex, listEdgesOfVertex);
             }

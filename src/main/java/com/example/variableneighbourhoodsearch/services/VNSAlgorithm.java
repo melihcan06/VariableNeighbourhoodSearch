@@ -8,80 +8,100 @@ import java.util.stream.*;
 
 public class VNSAlgorithm {
 
-    public String addUnusedLabelToGraph(Graph graph, Graph subGraph) {
+    public String addUnusedLabelToGraph(HashSet<String> allLabels, HashSet<String> c2Labels) {
         String addedLabel = "";
-        HashSet<String> setSubGraphLabels = subGraph.getSetLabels();
-        List<String> listUnusedLabels = graph.getSetLabels().stream().filter(label -> !setSubGraphLabels.contains(label)).collect(Collectors.toList());
+        List<String> listUnusedLabels = allLabels.stream().filter(label -> !c2Labels.contains(label)).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(listUnusedLabels)) {
             Collections.shuffle(listUnusedLabels);
             addedLabel = listUnusedLabels.get(0);
-            subGraph.getSetLabels().add(addedLabel);
-            subGraph = graph.createSubGraph(subGraph.getSetLabels(), false);
+            c2Labels.add(addedLabel);
         }
         return addedLabel;
     }
 
-    public String deleteLabelFromSubGraph(Graph graph, Graph subGraph) {
+    public String deleteLabelFromSubGraph(HashSet<String> c2Labels) {
         String deletedLabel = "";
-        List<String> listUsedLabels = new ArrayList<>(subGraph.getSetLabels());
-        if (!CollectionUtils.isEmpty(listUsedLabels)) {
+        List<String> listUsedLabels = new ArrayList<>(c2Labels);
+        if (!CollectionUtils.isEmpty(listUsedLabels) && listUsedLabels.size() > 2) {
             Collections.shuffle(listUsedLabels);
             deletedLabel = listUsedLabels.get(0);
-            subGraph.getSetLabels().remove(deletedLabel);
-            subGraph = graph.createSubGraph(subGraph.getSetLabels(), false);
+            c2Labels.remove(deletedLabel);
         }
         return deletedLabel;
     }
 
-    public HashSet<String> shakingPhase(Graph graph, Graph subGraph, int k) {
+    //allLabels -> graphLabels; cLabels -> subGraphLabels, C(feasible sol.) labels in algorithm
+    public HashSet<String> shakingPhase(HashSet<String> allLabels, HashSet<String> cLabels, int k) {
+        HashSet<String> c2Labels = (HashSet<String>) cLabels.clone();
         for (int i = 0; i < k; i++) {
-            if (Math.random() <= 0.5 && subGraph.getSetLabels().size() > 2) {
-                deleteLabelFromSubGraph(graph, subGraph);//subgraphlar degisiyor mu??
+            if (Math.random() <= 0.5) {
+                deleteLabelFromSubGraph(c2Labels);
             } else {
-                addUnusedLabelToGraph(graph, subGraph);//subgraphlar degisiyor mu??
+                //System.out.println("---");
+                //c2Labels.forEach(s1 -> System.out.println(s1));
+                //System.out.println("--");
+                addUnusedLabelToGraph(allLabels, c2Labels);
+                //c2Labels.forEach(s1 -> System.out.println(s1));
+                //System.out.println("---");
             }
         }
-        return subGraph.getSetLabels();
+        return c2Labels;
     }
 
-    public Graph localSearch(Graph graph, Graph subGraph) {
-        while (!subGraph.isGraphConnected()) {
+    public Graph localSearch(Graph allGraph, Graph subGraph2) {
+        while (!subGraph2.isGraphConnected()) {
+
             System.out.println("------BASLA-------");
-            subGraph.printLabels();
+
+            HashSet<String> c2 = subGraph2.getLabels();
+            c2.forEach(s1 -> System.out.println(s1));
             System.out.println("---------------");
-            addUnusedLabelToGraph(graph, subGraph);
-            subGraph.printLabels();
+
+            addUnusedLabelToGraph(allGraph.getLabels(), c2);
+
+            c2.forEach(s1 -> System.out.println(s1));
+            System.out.println("---------------");
+
+            subGraph2 = allGraph.createSubGraph(c2, false);
+
+            System.out.println("---------------");
+            subGraph2.getLabels().forEach(s1 -> System.out.println(s1));
+
             System.out.println("------BITIR------");
         }
-        for (int i = 0; i < subGraph.getSetLabels().size(); i++) {
-            String deletedLabel = deleteLabelFromSubGraph(graph, subGraph);
-            if(!subGraph.isGraphConnected() && !deletedLabel.isBlank()){
-                subGraph.getSetLabels().add(deletedLabel);
+        for (int i = 0; i < subGraph2.getLabels().size(); i++) {
+            HashSet<String> c2 = subGraph2.getLabels();
+            String deletedLabel = deleteLabelFromSubGraph(c2);
+            subGraph2 = allGraph.createSubGraph(c2, false);
+            if (!subGraph2.isGraphConnected() && !deletedLabel.isBlank()) {
+                c2.add(deletedLabel);
+                subGraph2 = allGraph.createSubGraph(c2, false);
             }
         }
-        return subGraph;
+        return subGraph2;
     }
 
     public void run(Graph graph) {
         Graph subGraph = graph.generateInitialSolution();
-        subGraph.printGraph();
-        System.out.println(subGraph.isGraphConnected());
-        subGraph.printLabels();//c
+        System.out.println("Feasible Solution");
+        subGraph.printGraphAll(graph);
 
         for (int i = 0; i < 1; i++) {//TODO gecici olarak durma kosulu, degistir!
             int k = 1;
-            int kMax = subGraph.getSetLabels().size() + subGraph.getSetLabels().size() / 3;
+            int kMax = subGraph.getLabels().size() + subGraph.getLabels().size() / 3;
             while (k < kMax) {
-                HashSet<String> c2 = shakingPhase(graph, subGraph, k);
-                Graph subGraph2 = localSearch(graph, subGraph.createSubGraph(c2, false));
-                if (subGraph2.getSetLabels().size() < subGraph.getSetLabels().size()) {
-                    subGraph = subGraph2;
+                HashSet<String> c2 = shakingPhase(graph.getLabels(), subGraph.getLabels(), k);
+                Graph subGraph2 = subGraph.createSubGraph(c2, false);
+                subGraph2 = localSearch(graph, subGraph2);
+                if (subGraph2.getLabels().size() < subGraph.getLabels().size()) {
+                    subGraph = subGraph2.cloneGraph();
                     k = 1;
                 } else {
                     k++;
                 }
             }
         }
-
+        System.out.println("Last Graph");
+        subGraph.printGraphAll(graph);
     }
 }
