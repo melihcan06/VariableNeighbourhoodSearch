@@ -75,7 +75,7 @@ public class VNSAlgorithm {
         System.out.println("---------------");
         for (int i = 0; i < subGraph2.getLabels().size(); i++) {
             HashSet<String> c2 = subGraph2.getLabels();
-            String deletedLabel = deleteLabelFromSubGraph(c2);
+            String deletedLabel = deleteLabelFromSubGraph(c2);//TODO rastgele cikartma, i ye gore sirayla cikart!!!
             subGraph2 = allGraph.createSubGraph(c2, false);
             if (!(subGraph2.isGraphConnected() && subGraph2.isAllNodesUsing(allGraph, subGraph2)) && !deletedLabel.isBlank()) {
                 c2.add(deletedLabel);
