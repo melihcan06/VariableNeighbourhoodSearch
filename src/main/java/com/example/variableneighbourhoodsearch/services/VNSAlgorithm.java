@@ -107,13 +107,13 @@ public class VNSAlgorithm {
                     k++;
                 }
             }
-        if(subGraph.getLabels().size()>2){
+            if(subGraph.getLabels().size()>2){
                 //int breakp=0;
                 //System.out.println("subGraph.getLabels().size()>2, i: "+i);
-            System.out.println("subGraph.getLabels().size(): "+subGraph.getLabels().size());
+                System.out.println("subGraph.getLabels().size(): "+subGraph.getLabels().size());
                 subGraph.printLabels();
             }
-        } while(subGraph.getLabels().size()>2);
+        } while(subGraph.getLabels().size()>2);//TODO grafımızın çözümüne uygun oldugu icin, baska problemde degistirilmelidir!!!
         System.out.println("Last Graph");
         subGraph.printGraphAll(graph);
         return subGraph;
